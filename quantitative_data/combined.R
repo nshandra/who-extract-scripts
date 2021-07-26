@@ -93,7 +93,7 @@ merged_data <- precombined_figures_full_list$extract_t1_precombined_val %>%
     mutate(conv_year = NA) %>%
     full_join(figs10abcdef, by = c('Year' = 'Year', 'quintile' = 'quintile', 'service' = 'service', 'values' = 'values', 'figure_code' = 'figure_code', 'table' = 'table')) %>%
     left_join(indicators_df, by = c('figure_code' = 'figure_code')) %>%
-    select(country, Year, quintile, indicator, table_label, service, values, table, figure_code, real_value, currency, conv_year) %>%
+    select(country, Year, quintile, table_label, figure_code, indicator, service, values, table, real_value, currency, conv_year) %>%
     mutate(values = round(values, 2)) 
 
 return(merged_data)
