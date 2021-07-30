@@ -13,7 +13,7 @@ extract_pe <- function(excel_file_path, save_csv_path){
   
   table <- readxl::read_excel(path = excel_file_path, sheet = 'pe', skip = 4)
   
-  names(table)[ncol(table)] <- "Notes"
+  # names(table)[ncol(table)] <- "Notes"
   
   table$Residence <-  table$Residence %>% str_remove_all(pattern = '\r|\n')
   table$Citizenship <-  table$Citizenship %>% str_remove_all(pattern = '\r|\n')
