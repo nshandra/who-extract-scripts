@@ -159,23 +159,31 @@ t2_aplph <- precombined_table2_list_func(xls_path)
                           full_join(t2_aplph$extract_t2_table_7_precombined_val) %>%
                           full_join(t2_aplph$extract_t2_table_8_precombined_val)
   
+  quantile_standard_name <- c('Poorest', '2nd', '3rd', '4th', 'Richest', 'Total')
+  
   t2t1_const <- t2_aplph$extract_t2_table_1_precombined_val %>%
     select(1:3) %>%
     rename(
       `constant` = values
-    )
+    ) %>% 
+    pivot_wider(names_from = "Year",values_from = "constant") %>% 
+    mutate(quintile = quantile_standard_name) %>%
+    pivot_longer(cols = 2:ncol(.), names_to = "Year", values_to = "constant")
+  
+  service_names <- extract_table_five_t2(xls_path)$df$service
   
   figs10n <- figs_alpabet_comb %>%
     select(service, Year, values, quintile) %>%
     left_join(t2t1_const, by = c('quintile' = 'quintile', 'Year' = 'Year')) %>%
+      mutate(values = ifelse(values>1, values/100, values)) %>%
       mutate(mult_val = values * constant) %>%
       mutate(figure_code = case_when(
-        service == 'Medicines' ~ 'F10a',
-        service == 'Inpatient care' ~ 'F10b',
-        service == 'Dental' ~ 'F10c',
-        service == 'Outpatient care' ~ 'F10d',
-        service == 'Diagnostic tests' ~ 'F10e',
-        service == 'Medical products' ~ 'F10f',
+        service == 'Medicines' | service == 'Drugs' | service == service_names[1]  ~ 'F10a',
+        service == 'Inpatient care' | service == 'Inpatient' | service == service_names[6] ~ 'F10b',
+        service == 'Dental' | service == 'Dental' | service == service_names[4] ~ 'F10c',
+        service == 'Outpatient care' | service == 'Outpatient' | service == service_names[3] ~ 'F10d',
+        service == 'Diagnostic tests' | service == 'Diagnostic tests and other paramedical services' | service == service_names[5] ~ 'F10e',
+        service == 'Medical products' | service == 'Other medical products and equipment' | service == service_names[2] ~ 'F10f',
         TRUE ~ 'NA'
       )) %>% 
     select(-c(values, constant)) %>%

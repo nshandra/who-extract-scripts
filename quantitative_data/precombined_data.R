@@ -21,7 +21,7 @@ extract_t1_precombined <- function(extracted_t1_sheet) {
   
   
   extracted_t1_sheet <- extracted_t1_sheet %>% pivot_longer(cols = 2:4, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T1") %>%
     mutate(figure_code = "F26")
   
@@ -40,7 +40,7 @@ extract_t2_table_n_precombined <- function(extract_t2_table_sheet, label_title, 
   extract_t2_table <- extract_t2_table_sheet$df
   
   extract_t2_table <- extract_t2_table %>% pivot_longer(cols = 2:length(extract_t2_table), names_to = "Year", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = label_title) %>%
     mutate(figure_code = figure_code_name) %>%
     mutate(table_label = table_label_val)
@@ -75,7 +75,7 @@ extract_t3_precombined <- function(extracted_t3_sheet) {
   # extracted_t3_sheet <- extract_t3('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t3_sheet <- extracted_t3_sheet %>% pivot_longer(cols = 2, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T3") %>%
     mutate(figure_code = "F3")
   
@@ -89,7 +89,7 @@ extract_t3_fig13_precombined <- function(extracted_t3_sheet) {
   # extracted_t3_sheet <- extract_t3_fig13('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t3_sheet <- extracted_t3_sheet %>% pivot_longer(cols = 2:4, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T3") %>%
     mutate(figure_code = "F13")
   
@@ -103,7 +103,7 @@ extract_t4_precombined <- function(extracted_t4_sheet) {
   # extracted_t4_sheet <- extract_t4('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t4_sheet <- extracted_t4_sheet %>% pivot_longer(cols = 2, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T4") %>%
     mutate(figure_code = "F14")
   
@@ -118,7 +118,7 @@ extract_t5_precombined <- function(extracted_t5_sheet) {
   # extracted_t5_sheet <- extract_t5('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t5_sheet <- extracted_t5_sheet %>% pivot_longer(cols = 3, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T5") %>%
     mutate(figure_code = "F4")
   
@@ -137,7 +137,7 @@ extract_t6_precombined <- function(extracted_t6_sheet) {
   # extracted_t6_sheet <- extract_t6('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t6_sheet <- extracted_t6_sheet %>% pivot_longer(cols = 3, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T6") %>%
     mutate(figure_code = "F16")
   
@@ -155,7 +155,7 @@ extract_t8_precombined <- function(extracted_t8_sheet) {
   # extracted_t8_sheet <- extract_t8('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t8_sheet <- extracted_t8_sheet %>% pivot_longer(cols = 3, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T8") %>%
     mutate(figure_code = "F20")
   
@@ -166,7 +166,7 @@ extract_t9_precombined <- function(extracted_t9_sheet) {
   # extracted_t9_sheet <- extract_t9('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t9_sheet <- extracted_t9_sheet %>% pivot_longer(cols = 4:9, names_to = "service", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T9") %>%
     mutate(figure_code = "F21")
   
@@ -184,7 +184,7 @@ extract_t10_precombined <- function(extracted_t10_sheet) {
   # extracted_t10_sheet <- extract_t10('../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
   
   extracted_t10_sheet <- extracted_t10_sheet %>% pivot_longer(cols = 2:5, names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     mutate(table = "T10") %>%
     mutate(figure_code = "F15")
   
@@ -217,7 +217,7 @@ extract_t13_precombined <- function(extracted_t13_sheet) {
     ), by = c("Year" = "Year", "figure_code" = "figure_code", "table" = "table"))
   
   extracted_t13_sheet <- extracted_t13_sheet %>% pivot_longer(cols = c(2, 6), names_to = "table_label", values_to = "values") %>%
-    mutate(values = round(as.numeric(values), 3)) %>% 
+    mutate(values = as.numeric(values)) %>% 
     drop_na(values) 
   
   return(extracted_t13_sheet)

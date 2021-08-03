@@ -26,7 +26,8 @@ extract_t3 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table1)){
-    table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 2)), digits = 2),nsmall = 2)
+    table1[,j] <- as.numeric(round(unlist(table1[,j])))
+    # table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 2)), digits = 2),nsmall = 2)
   }
   
   table1 <- table1 %>%
@@ -75,7 +76,8 @@ extract_t3_fig13 <- function(excel_file_path, save_csv_path) {
   colnames(table) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table)){
-    table[,j] <- as.numeric(round(unlist(table[,j]), digits = 2))
+    table[,j] <- as.numeric(round(unlist(table[,j])))
+    # table[,j] <- as.numeric(round(unlist(table[,j]), digits = 2))
   }
   table[47, ]$indicator <- str_glue('{table[44, ]$indicator}- {table[47, ]$indicator}') 
   

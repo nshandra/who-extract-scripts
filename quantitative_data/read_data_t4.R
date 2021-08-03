@@ -27,7 +27,8 @@ extract_t4 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table1)){
-    table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 2)), digits = 2),nsmall = 2)
+    table1[,j] <- as.numeric(round(unlist(table1[,j])))
+    # table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 2)), digits = 2),nsmall = 2)
   }
   
   table1 <- table1 %>%
