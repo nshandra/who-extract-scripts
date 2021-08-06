@@ -11,7 +11,9 @@ library(dplyr)
 
 extract_uc <- function(excel_file_path, save_csv_path){ 
   
-  table <- readxl::read_excel(path = excel_file_path, sheet = "uc", skip = 2)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\buc\\b")
+  
+  table <- readxl::read_excel(path = excel_file_path, sheet = sheet_num_extract, skip = 2)
   names(table)[1:2] <- c('Service', 'Service Category')
   # if(ncol(table) == 42) {
   #   names(table)[(ncol(table)-2):ncol(table)] <- c('VHI covers user charges for publicly financed health services - NO', 

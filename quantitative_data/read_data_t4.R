@@ -13,11 +13,11 @@ library(purrr)
 
 extract_t4 <- function(excel_file_path, save_csv_path){ 
   # excel_file_path <- '../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx'
-  
-  table1 <- readxl::read_excel(excel_file_path, sheet = "T4")
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT4\\b")
+  table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T4", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 

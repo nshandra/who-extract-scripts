@@ -12,14 +12,14 @@ library(purrr)
 
 
 extract_t10 <- function(excel_file_path, save_csv_path){ 
-  
-  table1 <- readxl::read_excel(excel_file_path, sheet = "T10", skip = 2) %>%
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT10\\b")
+  table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 2) %>%
     select(1, 10:13)
   
   names(table1) <-  c(names(table1)[1], substr(names(table1)[2:5],1,nchar(names(table1)[2:5])-4)) %>% str_remove(pattern = '[.]') 
   
   # Title 
-  header_title <- readxl::read_excel(excel_file_path, sheet = "T10", skip = 0, n_max = 1) %>% 
+  header_title <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>%

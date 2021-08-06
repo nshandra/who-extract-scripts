@@ -12,12 +12,12 @@ library(purrr)
 
 
 extract_t13 <- function(excel_file_path, save_csv_path){ 
-  
-  table1 <- readxl::read_excel(excel_file_path, sheet = "T13", skip = 3) %>% 
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT13\\b")
+  table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 3) %>% 
     select(1, 19:20)
   
   
-  years <- readxl::read_excel(excel_file_path, sheet = "T13", skip = 3) %>% 
+  years <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 3) %>% 
     select(1, 19:20) %>%
     select(Year) %>% drop_na() %>% pull() 
   

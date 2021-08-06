@@ -10,10 +10,11 @@ library(purrr)
 
 extract_table_one_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 2, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 2, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -71,11 +72,12 @@ extract_table_one_t2 <- function(excel_file_path, save_csv_path){
 extract_table_two_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
   # excel_file_path <- '../../../../../../Desktop/appendix tables/SWE_Appendix_tables_May 2017_clean 02 Jun 2021.xlsx'
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 10, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 10, n_max = 7)
   
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -138,10 +140,11 @@ extract_table_two_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_three_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 18, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 18, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -201,10 +204,11 @@ extract_table_three_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_four_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 26, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 26, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -264,10 +268,11 @@ extract_table_four_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_five_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 34, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 34, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -329,10 +334,11 @@ extract_table_five_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_six_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 42, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 42, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -393,10 +399,11 @@ extract_table_six_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_seven_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 50, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 50, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -456,10 +463,11 @@ extract_table_seven_t2 <- function(excel_file_path, save_csv_path){
 
 extract_table_eight_t2 <- function(excel_file_path, save_csv_path){
   # Mean annual per capita OOP by income quintile
-  t2_n <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 58, n_max = 7)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 58, n_max = 7)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T2", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 

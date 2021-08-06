@@ -11,7 +11,9 @@ library(dplyr)
 
 extract_pe <- function(excel_file_path, save_csv_path){ 
   
-  table <- readxl::read_excel(path = excel_file_path, sheet = 'pe', skip = 4)
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bpe\\b")
+  
+  table <- readxl::read_excel(path = excel_file_path, sheet = sheet_num_extract, skip = 4)
   
   # names(table)[ncol(table)] <- "Notes"
   

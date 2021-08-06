@@ -12,11 +12,12 @@ library(purrr)
 
 
 extract_t3 <- function(excel_file_path, save_csv_path){ 
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT3\\b")
   
-  table1 <- readxl::read_excel(excel_file_path, sheet = "T3")
+  table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T3", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 
@@ -63,10 +64,12 @@ extract_t3 <- function(excel_file_path, save_csv_path){
 
 
 extract_t3_fig13 <- function(excel_file_path, save_csv_path) {
-  table <- readxl::read_excel(excel_file_path, sheet = "T3")
+  sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT1\\b")
+  
+  table <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
   
   # Title years
-  years_extracted <- readxl::read_excel(excel_file_path, sheet = "T3", skip = 0, n_max = 1) %>% 
+  years_extracted <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 0, n_max = 1) %>% 
     gather() %>% 
     select(value) %>% 
     drop_na() %>% 

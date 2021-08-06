@@ -1,5 +1,6 @@
 library(tidyverse)
 library(dplyr)
+library(stringr)
 
 source('qt_data_scripts/precombined_list.R')
 
@@ -93,8 +94,10 @@ merged_data <- precombined_figures_full_list$extract_t1_precombined_val %>%
     mutate(conv_year = NA) %>%
     full_join(figs10abcdef, by = c('Year' = 'Year', 'quintile' = 'quintile', 'service' = 'service', 'values' = 'values', 'figure_code' = 'figure_code', 'table' = 'table')) %>%
     left_join(indicators_df, by = c('figure_code' = 'figure_code')) %>%
+    mutate(values = if_else((table == 'T10' | table == 'T13'), values*100, values)) %>%
     select(country, Year, quintile, table_label, figure_code, indicator, service, values, table, real_value, currency, conv_year) %>%
-    mutate(values = round(values, 2)) 
+    set_names(names(.) %>% str_to_lower())
+    
 
 return(merged_data)
 
