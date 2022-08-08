@@ -30,8 +30,8 @@ extract_t9 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('table_label', 'quintile', years_extracted)
   
   for(j in 3:ncol(table1)){
+    table1[,j] <- as.numeric(unlist(table1[,j]))
      # table1[,j] <- format(round(as.numeric(unlist(table1[,j])), digits = 2),nsmall = 2)
-     table1[,j] <- as.numeric(round(unlist(table1[,j])))
   }
   
   # Tidy up names
@@ -57,15 +57,14 @@ extract_t9 <- function(excel_file_path, save_csv_path){
     pivot_wider(names_from = 'service', values_from = 'value')
   
   
-  write.csv(table1, file = save_csv_path)
-
-  message("Table extracted from T9")
-  
   return(table1)
   
+  # write.csv(table1, file = save_csv_path)
+  # 
+  # message("Table extracted from T8")  
 }
 
 
 # ====================================================================================
-# USAGE: extract_t9() function example
+# USAGE: extract_t8() function example
 # ====================================================================================

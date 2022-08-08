@@ -11,8 +11,10 @@ library(purrr)
 
 
 
-extract_t10 <- function(excel_file_path, save_csv_path){ 
+extract_t10 <- function(excel_file_path){ 
+  
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT10\\b")
+  
   table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 2) %>%
     select(1, 10:13)
   
@@ -30,20 +32,19 @@ extract_t10 <- function(excel_file_path, save_csv_path){
   header_title <- str_replace_all(str_to_title(header_title), ' ', replacement = '_') 
   
   for(j in 2:ncol(table1)){
+    table1[,j] <- as.numeric(unlist(table1[,j]))
     # table1[,j] <- format(round(as.numeric(unlist(table1[,j])), 3), nsmall = 3)
-    table1[,j] <- as.numeric(round(unlist(table1[,j])))
   }
   
   table1[,1] <- as.integer(unlist(table1[,1]))
   
   # Tidy up names
   
-  write.csv(table1, file = save_csv_path)
-
-  message("Table extracted from T0")
-  
   return(table1)
   
+  # write.csv(table1, file = save_csv_path)
+  # 
+  # message("Table extracted from T0")  
 }
 
 
@@ -51,7 +52,7 @@ extract_t10 <- function(excel_file_path, save_csv_path){
 # USAGE: extract_t10() function example
 # ====================================================================================
 
-### NOTES ###
+### NOTES FOR KATE ###
 # just changes `excel_file_path` where .xls is located, 
 # also you can change `save_csv_path`- directory where to save extracted .csv (it is optional)
 # Then just run the R script

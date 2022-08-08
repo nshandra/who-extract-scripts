@@ -11,8 +11,13 @@ library(purrr)
 
 
 
-extract_t13 <- function(excel_file_path, save_csv_path){ 
+extract_t13 <- function(excel_file_path){ 
+  
+  # excel_file_path <- '../../../Downloads/GEO_Appendix_tables_Dec 2016_clean 03 Jun 2021.xlsx'
+  # excel_file_path <- '../../../Downloads/Background material DB 10 Feb 2022/Bulgaria/BUL_Appendix_tables.xlsx'
+  
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT13\\b")
+  
   table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 3) %>% 
     select(1, 19:20)
   
@@ -24,17 +29,19 @@ extract_t13 <- function(excel_file_path, save_csv_path){
   # Fill in missing values
   table1 <- table1 %>%
     mutate(Year = rep(years, nrow(table1)/length(years)) %>% sort())
+  # Multiply to 100 to convert to percent
+  table1[,2] <- table1[,2] * 100
+  table1[,3] <- table1[,3] * 100
   
-  
-  titles <-  readxl::read_excel(excel_file_path, sheet = 15, skip = 1, n_max = 1) %>% 
+  titles <-  readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 1, n_max = 1) %>% 
     gather() %>% select(value) %>% slice((nrow(.)-1):nrow(.)) %>% pull()
   
   names(table1) <- c(names(table1)[1], str_glue('{titles} - {names(table1)[2:3]}')) 
   
   
   for(j in 2:ncol(table1)){
+    table1[,j] <- as.numeric(unlist(table1[,j]))
     # table1[,j] <- format(round(as.numeric(unlist(table1[,j])), digits = 3),nsmall = 3)
-    table1[,j] <- as.numeric(round(unlist(table1[,j])))
   }
   
   table1 <- table1 %>%
@@ -42,12 +49,11 @@ extract_t13 <- function(excel_file_path, save_csv_path){
   
   # Tidy up names
   
-  write.csv(table1, file = save_csv_path)
-
-  message("Table extracted from T13")
-  
   return(table1)
   
+  # write.csv(table1, file = save_csv_path)
+  # 
+  # message("Table extracted from T0")
 }
 
 

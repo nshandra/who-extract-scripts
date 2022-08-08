@@ -7,7 +7,8 @@ source('qt_data_scripts/precombined_list.R')
 
 combine_data_by_country <- function(xls_path, file_name) {
   
-# precombined_figures_full_list <- precombined_figures_full_list_func('../../../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx')
+# precombined_figures_full_list <- precombined_figures_full_list_func(xls_path = '../../../Downloads/Background material DB 10 Feb 2022/Bulgaria/BUL_Appendix_tables.xlsx')
+# file_name = 'BULGARIA'
 precombined_figures_full_list <- precombined_figures_full_list_func(xls_path = xls_path)
 indicators_df <- readRDS(file = 'data/indicators_list.rds')
 
@@ -95,9 +96,10 @@ merged_data <- precombined_figures_full_list$extract_t1_precombined_val %>%
     full_join(figs10abcdef, by = c('Year' = 'Year', 'quintile' = 'quintile', 'service' = 'service', 'values' = 'values', 'figure_code' = 'figure_code', 'table' = 'table')) %>%
     left_join(indicators_df, by = c('figure_code' = 'figure_code')) %>%
     mutate(values = if_else((table == 'T10' | table == 'T13'), values*100, values)) %>%
-    select(country, Year, quintile, table_label, figure_code, indicator, service, values, table, real_value, currency, conv_year) %>%
+    select(country, Year, quintile, indicator, table_label, service, values, table, figure_code, real_value, currency, conv_year) %>%
     set_names(names(.) %>% str_to_lower())
-    
+
+
 
 return(merged_data)
 

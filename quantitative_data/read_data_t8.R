@@ -13,6 +13,7 @@ library(purrr)
 
 extract_t8 <- function(excel_file_path, save_csv_path){ 
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT8\\b")
+  
   table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
   
   # Title years
@@ -26,8 +27,8 @@ extract_t8 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table1)){
+    table1[,j] <- as.numeric(unlist(table1[,j]))
     # table1[,j] <- format(round(as.numeric(unlist(table1[,j])), digits = 2),nsmall = 2)
-    table1[,j] <- as.numeric(round(unlist(table1[,j])))
   }
   
   # Tidy up names
@@ -52,12 +53,12 @@ extract_t8 <- function(excel_file_path, save_csv_path){
       Year = year
     ) %>% pivot_wider(names_from = 'indicator', values_from = 'value')
   
-  write.csv(table1, file = save_csv_path)
-  
-  message("Table extracted from T8")
 
   return(table1)
     
+  # write.csv(table1, file = save_csv_path)
+  # 
+  # message("Table extracted from T8")  
 }
 
 

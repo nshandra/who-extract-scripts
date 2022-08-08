@@ -11,7 +11,7 @@ library(purrr)
 
 
 
-extract_t4 <- function(excel_file_path, save_csv_path){ 
+extract_t4 <- function(excel_file_path){ 
   # excel_file_path <- '../../../../Downloads/LVA_Appendix_tables_Aug 2020_clean 03 Jun 2021.xlsx'
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT4\\b")
   table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
@@ -27,7 +27,7 @@ extract_t4 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table1)){
-    table1[,j] <- as.numeric(round(unlist(table1[,j])))
+    table1[,j] <- as.numeric(unlist(table1[,j]))
     # table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 2)), digits = 2),nsmall = 2)
   }
   
@@ -36,9 +36,9 @@ extract_t4 <- function(excel_file_path, save_csv_path){
     pivot_longer(cols = 2:ncol(table1), names_to = "Year", values_to = "value", names_repair = "unique") %>%
     pivot_wider(names_from = "indicator", values_from = "value")
   
-  write.csv(table1, file = save_csv_path)
-
-  message("Table extracted from T4")
+  # write.csv(table1, file = save_csv_path)
+  # 
+  # message("Table extracted from T3")  
   
   return(table1)
   
@@ -49,7 +49,7 @@ extract_t4 <- function(excel_file_path, save_csv_path){
 # USAGE: extract_t4() function example
 # ====================================================================================
 
-### NOTES ###
+### NOTES FOR KATE ###
 # just changes `excel_file_path` where .xls is located, 
 # also you can change `save_csv_path`- directory where to save extracted .csv (it is optional)
 # Then just run the R script

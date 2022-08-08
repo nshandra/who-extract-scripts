@@ -11,8 +11,10 @@ library(purrr)
 
 
 
-extract_t1 <- function(excel_file_path, save_csv_path){ 
+extract_t1 <- function(excel_file_path){ 
+  
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT1\\b")
+  
   table1 <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract)
     
     # Title years
@@ -26,7 +28,7 @@ extract_t1 <- function(excel_file_path, save_csv_path){
   colnames(table1) <- c('indicator', years_extracted)
   
   for(j in 2:ncol(table1)){
-    table1[,j] <- as.numeric(round(unlist(table1[,j])))
+    table1[,j] <- as.numeric(unlist(table1[,j]))
     # table1[,j] <- format(round(as.numeric(round(unlist(table1[,j]), digits = 3)), digits = 3), nsmall = 3)
   }
   
@@ -35,9 +37,9 @@ extract_t1 <- function(excel_file_path, save_csv_path){
     pivot_longer(cols = 2:ncol(table1), names_to = "Year", values_to = "value", names_repair = "unique") %>%
     pivot_wider(names_from = "indicator", values_from = "value")
   
-  write.csv(table1, file = save_csv_path)
+  # write.csv(table1, file = save_csv_path)
   # 
-  message("Table extracted from T1")  
+  # message("Table extracted from T1")  
   
   return(table1)
 }
@@ -52,8 +54,8 @@ extract_t1 <- function(excel_file_path, save_csv_path){
 # also you can change `save_csv_path`- directory where to save extracted .csv (it is optional)
 # Then just run the R script
 
-# extract_t1(excel_file_path = "data-raw/BUL_Appendix_tables.xlsx",
-#                      save_csv_path = "../fig_test.csv")
+# extract_t1(excel_file_path = "../data-raw/extracted_csvs/",
+#                      save_csv_path = "../data-raw/extracted_csvs/T1/Figure_26_Final.csv")
 
 
 # ====================================================================================

@@ -7,7 +7,7 @@ library(purrr)
 # =============================================================================================
 # *************************************** Figure 2 from T0 ************************************
 # =============================================================================================
-extract_t0_fig2 <- function(excel_file_path, save_csv_path) {
+extract_t0_fig2 <- function(excel_file_path) {
   
   fig2 <- readxl::read_excel(excel_file_path, sheet = 2, skip = 12, n_max = 7)
   
@@ -42,10 +42,10 @@ extract_t0_fig2 <- function(excel_file_path, save_csv_path) {
       `Income Quintile` = quintile
     ) 
   
-  fig2 %>%
-    write.csv(x = ., file = save_csv_path)
+  # fig2 %>%
+  #   write.csv(x = ., file = save_csv_path)
   
-  message("Fig2 extracted from T0")
+  # message("Fig2 extracted from T0")
   
   return(fig2)
   
@@ -66,7 +66,7 @@ extract_t0_fig2 <- function(excel_file_path, save_csv_path) {
 # ****************************** Figure 3 from T0 ************************************
 # ====================================================================================
 
-extract_t0_fig3 <- function(excel_file_path, save_csv_path) {
+extract_t0_fig3 <- function(excel_file_path) {
 
   fig3 <- readxl::read_excel(excel_file_path, sheet = 2, skip = 21, n_max = 7)
   
@@ -80,10 +80,9 @@ extract_t0_fig3 <- function(excel_file_path, save_csv_path) {
   fig3 <- fig3 %>%
     pivot_longer(cols = names(fig3)[2]:names(fig3)[ncol(fig3)], names_to = "Year") 
   
-  fig3 %>%
-    write.csv(x = ., file = save_csv_path)
-  
-  message("Fig3 extracted from T0")
+  # fig3 %>%
+  #   write.csv(x = ., file = save_csv_path)
+  # message("Fig3 extracted from T0")
   
   return(fig3)
   
@@ -106,7 +105,7 @@ extract_t0_fig3 <- function(excel_file_path, save_csv_path) {
 # ====================================================================================
 
 
-extract_t0_fig5 <- function(excel_file_path, save_csv_path) {
+extract_t0_fig5 <- function(excel_file_path) {
   
   fig5 <- readxl::read_excel(excel_file_path, sheet = 2, skip = 57, n_max = 7)
   # Extract years
@@ -144,12 +143,11 @@ extract_t0_fig5 <- function(excel_file_path, save_csv_path) {
       Year = year,
       `Income Quintile` = quintile
     )
-  
-  fig5%>%
-    write.csv(x = ., file = save_csv_path)
-
-
-  message("Fig5 extracted from T0")
+  # %>%
+  #   write.csv(x = ., file = save_csv_path)
+  # 
+  # 
+  # message("Fig5 extracted from T0")
   
   return(fig5)
   
@@ -188,7 +186,7 @@ general_extraction_t0 <- function(excel_file_path, fig2_save_path, fig3_save_pat
 
 # ====================================================================================
 
-#### NOTES ####
+#### NOTES FOR KATE ####
 
 # -1) Load required libraries 1 - 5 strings, and declare fucntions (run the pieces of code with functions body)
 # -2) If you would like to extract only fig.3 for example just run the `extract_t0_fig3()`

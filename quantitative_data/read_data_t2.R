@@ -8,9 +8,10 @@ library(purrr)
 # **************************************** Table 1 from T2 ************************************
 # =============================================================================================
 
-extract_table_one_t2 <- function(excel_file_path, save_csv_path){
+extract_table_one_t2 <- function(excel_file_path){
   # Mean annual per capita OOP by income quintile
   sheet_num_extract <- excel_sheets(excel_file_path) %>% str_trim() %>% str_which(pattern = "\\bT2\\b")
+  
   t2_n <- readxl::read_excel(excel_file_path, sheet = sheet_num_extract, skip = 2, n_max = 7)
   
   # Title years
@@ -37,7 +38,7 @@ extract_table_one_t2 <- function(excel_file_path, save_csv_path){
   table_one_title <- as.character(str_glue('T2_ONE_{table_one_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3), nsmall = 3)
   }
   
@@ -45,8 +46,6 @@ extract_table_one_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_one_title
   )
-  
-  write.csv(x = reslt$df, file = save_csv_path)
   
   return(reslt)
 }
@@ -56,7 +55,7 @@ extract_table_one_t2 <- function(excel_file_path, save_csv_path){
 # USAGE: extract_table_one_t2() function example
 # ====================================================================================
 
- # one <- extract_table_one_t2(excel_file_path = "../data-raw/LVA_Appendix_tables_Aug_2020.xlsx", save_csv_path = "../test.csv")
+ # one <- extract_table_one_t2(excel_file_path = "../data-raw/LVA_Appendix_tables_Aug_2020.xlsx")
  # as.data.frame(one$df) %>% class()
 # one
 
@@ -104,7 +103,7 @@ extract_table_two_t2 <- function(excel_file_path, save_csv_path){
   table_one_title <- as.character(str_glue('T2_TWO_{table_one_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -112,9 +111,6 @@ extract_table_two_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_one_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_TWO_{table_one_title}.csv'))
-  message("Table two from t2 extracted")
   
   return(reslt)
 }
@@ -168,7 +164,7 @@ extract_table_three_t2 <- function(excel_file_path, save_csv_path){
   table_one_title <- as.character(str_glue('T2_THREE_{table_one_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -176,9 +172,6 @@ extract_table_three_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_one_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_THREE_{table_one_title}.csv'))
-  message("Table three from t2 extracted")
   
   return(reslt)
   
@@ -232,7 +225,7 @@ extract_table_four_t2 <- function(excel_file_path, save_csv_path){
   table_title <- as.character(str_glue('T2_FOUR_{table_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3), nsmall = 3)
   }
   
@@ -240,9 +233,6 @@ extract_table_four_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_FOUR_{table_title}.csv'))
-  message("Table four from t2 extracted")
   
   return(reslt)
   
@@ -296,7 +286,7 @@ extract_table_five_t2 <- function(excel_file_path, save_csv_path){
   table_title <- as.character(str_glue('T2_FIVE_{table_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -304,9 +294,6 @@ extract_table_five_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_FIVE_{table_title}.csv'))
-  message("Table five from t2 extracted")
   
   return(reslt)
   
@@ -362,7 +349,7 @@ extract_table_six_t2 <- function(excel_file_path, save_csv_path){
   table_title <- as.character(str_glue('T2_SIX_{table_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -370,9 +357,6 @@ extract_table_six_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_SIX_{table_title}.csv'))
-  message("Table six from t2 extracted")
   
   return(reslt)
   
@@ -426,7 +410,7 @@ extract_table_seven_t2 <- function(excel_file_path, save_csv_path){
   table_title <- as.character(str_glue('T2_SEVEN_{table_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -434,9 +418,6 @@ extract_table_seven_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_SEVEN_{table_title}.csv'))
-  message("Table seven from t2 extracted")
   
   return(reslt)
 }
@@ -491,7 +472,7 @@ extract_table_eight_t2 <- function(excel_file_path, save_csv_path){
   table_title <- as.character(str_glue('T2_EIGHT_{table_title}.csv'))
   
   for(j in 2:ncol(t2_n)){
-    t2_n[,j] <- as.numeric(round(unlist(t2_n[,j])))
+    t2_n[,j] <- as.numeric(unlist(t2_n[,j]))
     # t2_n[,j] <- format(round(as.numeric(round(unlist(t2_n[,j]), digits = 3)), digits = 3),nsmall = 3)
   }
   
@@ -505,9 +486,6 @@ extract_table_eight_t2 <- function(excel_file_path, save_csv_path){
     df = t2_n,
     title = table_title
   )
-  
-  write.csv(t2_n, file = str_glue('{save_csv_path}T2_EIGHT_{table_title}.csv'))
-  message("Table eight from t2 extracted")
   
   return(reslt)
   
@@ -550,7 +528,7 @@ extract_all_t2 <- function(excel_file_path, save_csv_path){
 # USAGE: extract_all_t2() function example
 # ====================================================================================
 
-### NOTES ###
+### NOTES FOR KATE ###
 # just changes `excel_file_path` where .xls is located, 
 # also you can change `save_csv_path`- directory where to save extracted .csv (it is optional)
 # Then just run the R script
