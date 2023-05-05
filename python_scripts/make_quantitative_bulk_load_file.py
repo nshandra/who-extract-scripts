@@ -354,7 +354,8 @@ def main():
     parser = argparse.ArgumentParser(description='Process CSV from "Data Extraction Tool" into "Bulk Load" XLSX files. \
                                      The script needs a template, it either can be supplied with the --xlsx_template \
                                      argument or by placing a template named "Quantitative_Data_UHCPW_Template.xlsx" \
-                                     in the same folder as the script')
+                                     in the same folder as the script.\
+                                     Outputs to a XLSX file with same name as the source CSV one.')
     parser.add_argument('indicators_csv', type=str, help='Source CSV file')
     parser.add_argument('-x', '--xlsx_template', type=str,
                         help='Bulk Load Quantitative XLSX template file path, if empty tries to open "Quantitative_Data_UHCPW_Template.xlsx"')

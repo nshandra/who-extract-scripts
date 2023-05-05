@@ -3,3 +3,15 @@
 .RData
 .Ruserdata
 *.Rproj
+
+# vscode settings
+.vscode
+
+# data
+.~lock*
+*.csv
+*.xlsx
+*.txt
+
+# python
+!python_scripts/requirements.txt
