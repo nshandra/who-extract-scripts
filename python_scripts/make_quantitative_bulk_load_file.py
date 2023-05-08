@@ -1,8 +1,13 @@
 import argparse
+import json
 import csv
 import sys
 import openpyxl
 from openpyxl.cell import MergedCell
+from collections import namedtuple
+
+
+Metadata_ids = namedtuple("Metadata_ids", "indicators, countries, combos")
 
 
 COUNTRY_DICT = {
@@ -236,7 +241,7 @@ def extract_values_from_csv(filename):
                 if value != 'NA' and value != None:
                     values[country_name][year][indicator_name][cat_opt_combo] = value
                 else:
-                    debug('Empty CSV value: ', value)
+                    debug('Empty CSV value in row: ', row)
 
         return values
     except Exception as e:
@@ -264,14 +269,14 @@ def get_metadata_ids(workbook):
         if type_col == 'organisationUnit':
             countries_id_dict[name] = identifier
 
-    return indicators_id_dict, countries_id_dict, combos_id_dict
+    return Metadata_ids(indicators_id_dict, countries_id_dict, combos_id_dict)
 
 
-def make_matched_values(csv_values_dict, indicators_id_dict, countries_id_dict, combos_id_dict):
+def make_matched_values(csv_values_dict, ids: Metadata_ids):
     data = {}
 
     for country, country_data in csv_values_dict.items():
-        country_id = countries_id_dict[country]
+        country_id = ids.countries[country]
         data[country_id] = {}
 
         for year, indicators in country_data.items():
@@ -279,13 +284,13 @@ def make_matched_values(csv_values_dict, indicators_id_dict, countries_id_dict, 
                 data[country_id][year] = {}
 
             for indicator_name, indicator_combos in indicators.items():
-                indicator_id = indicators_id_dict[indicator_name]
+                indicator_id = ids.indicators[indicator_name]
                 if indicator_id not in data[country_id][year]:
                     data[country_id][year][indicator_id] = {}
 
                 for combo_name, value in indicator_combos.items():
                     combo_ids = []
-                    for id, name in combos_id_dict.items():
+                    for id, name in ids.combos.items():
                         if name == combo_name:
                             combo_ids.append(id)
                     combo_id = '|'.join(combo_ids)
@@ -394,17 +399,17 @@ def main():
         sys.exit(1)
 
     csv_values_dict = extract_values_from_csv(args.indicators_csv)
-    debug('csv_values_dict:\n', csv_values_dict)
+    debug('csv_values_dict:\n', json.dumps(csv_values_dict))
 
-    indicators_id_dict, countries_id_dict, combos_id_dict = get_metadata_ids(wb)
+    ids = get_metadata_ids(wb)
 
-    debug(f'indicators_id_dict:\n len: {len(indicators_id_dict)}\n values:\n', indicators_id_dict)
-    debug(f'countries_id_dict:\n len: {len(countries_id_dict)}\n values:\n', countries_id_dict)
-    debug(f'combos_id_dict:\n len: {len(combos_id_dict)}\n values:\n', combos_id_dict)
+    debug(f'indicators ids:\n len: {len(ids.indicators)}\n values:\n', json.dumps(ids.indicators))
+    debug(f'countries ids:\n len: {len(ids.countries)}\n values:\n', json.dumps(ids.countries))
+    debug(f'combos ids:\n len: {len(ids.combos)}\n values:\n', json.dumps(ids.combos))
 
-    matched_values = make_matched_values(csv_values_dict, indicators_id_dict, countries_id_dict, combos_id_dict)
+    matched_values = make_matched_values(csv_values_dict, ids)
 
-    debug(f'matched_values:\n', matched_values)
+    debug(f'matched_values:\n', json.dumps(matched_values))
 
     write_values(wb, matched_values)
 
