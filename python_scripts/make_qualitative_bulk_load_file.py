@@ -212,7 +212,7 @@ def main():
                                      in the same folder as the script.\
                                      Outputs to a XLSX file named <COUNTRY>_<YEAR>_Qualitative_Data.xlsx.')
     parser.add_argument('docx_filename', type=str,
-                        help='The path to the DOCX file source file.')
+                        help='The path to the DOCX source file.')
     parser.add_argument('-x', '--xlsx_template', type=str,
                         help='Bulk Load Qualitative XLSX template file path, \
                             if empty tries to open "Qualitative_Data_UHCPW_Template.xlsx"')
