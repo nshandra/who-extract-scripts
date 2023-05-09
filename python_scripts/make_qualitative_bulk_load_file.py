@@ -222,7 +222,7 @@ def main():
                         help='Bulk Load Qualitative XLSX template file path, \
                             if empty tries to open "Qualitative_Data_UHCPW_Template.xlsx"')
     parser.add_argument('-d', '--debug', action='store_true',
-                        help='Display debug logs, its recommended to redirect the output into a file, e.g: ... > log.txt')
+                        help='Print debug logs into a "log.json" file.')
     args = parser.parse_args()
 
     if not filepath_exists(args.docx_filename):

@@ -79,9 +79,9 @@ Simple use:
 python3 make_qualitative_bulk_load_file.py summary_tables.docx
 ```
 
-Specifying a template, using debug flag and redirecting the debug text into a file:
+Specifying a template and using debug flag:
 ```bash
-python3 make_qualitative_bulk_load_file.py summary_tables.docx --xlsx_template=~/docs/Qualitative_Template.xlsx -d > script_log.json
+python3 make_qualitative_bulk_load_file.py summary_tables.docx --xlsx_template=~/docs/Qualitative_Template.xlsx -d
 ```
 
 ### Positional Arguments
@@ -94,4 +94,4 @@ python3 make_qualitative_bulk_load_file.py summary_tables.docx --xlsx_template=~
 
 `-x XLSX_TEMPLATE`, `--xlsx_template XLSX_TEMPLATE`: The Bulk Load Quantitative XLSX template file path. If empty, the script will try to open "Quantitative_Data_UHCPW_Template.xlsx".
 
-`-d`, `--debug`: Display debug logs. It is recommended to redirect the output into a file, e.g: `... > log.json`.
+`-d`, `--debug`: Print debug logs into a `log.json` file.
