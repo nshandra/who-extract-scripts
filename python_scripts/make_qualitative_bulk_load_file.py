@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import argparse
+import traceback
 from docx import Document
 from collections import namedtuple
 import openpyxl
@@ -26,7 +27,8 @@ def get_data_element_id(de, data_elements_ids):
     if de in data_elements_ids:
         return data_elements_ids[de]
     else:
-        raise ValueError(f'Can\'t find id for: {de}')
+        print(f'Can\'t find id for: {de}')
+        return None
 
 def get_metadata_ids(workbook):
     sections_id_dict = {}
@@ -69,6 +71,8 @@ def make_matched_values(all_tables_data, ids: Metadata_ids):
         for de_name, value in table_data.items():
             if not de_name in ids.sections:
                 de_id = get_data_element_id(de_name, ids.data_elements)
+                if not de_id:
+                    pass
                 if de_id not in data[country_id][YEAR]:
                     data[country_id][YEAR][de_id] = {}
 
@@ -186,7 +190,7 @@ def extract_longtext_tables(document):
             if key and value:
                 table_data[key] = value
             else:
-                debug(f'Empty row with {"DE: " + key if key else ""}{" and " if key and value else ""}{"value: " + value if value else ""} in document')
+                debug(f'Empty row with {"DE: " + key if key else ""}{" and " if key and value else ""}{"value: " + value if value else ""} in source file')
 
         tables_data_list.append(table_data)
 
@@ -195,11 +199,12 @@ def extract_longtext_tables(document):
 
 def debug(*msg):
     if DEBUG:
-        print(*msg)
+        with open(LOG_FILE, "a") as log_file:
+            print(*msg, file=log_file)
 
 
 def filepath_exists(filepath):
-    return True if os.path.isfile(filepath) else False
+    return os.path.isfile(filepath)
 
 
 def main():
@@ -223,31 +228,43 @@ def main():
     if not filepath_exists(args.docx_filename):
         parser.error(f'The source file: {args.docx_filename} doesn\'t exist')
 
-    global OUT_FILENAME, DEFAULT_TEMPLATE, DEBUG, COUNTRY, YEAR
+    global OUT_FILENAME, DEFAULT_TEMPLATE, DEBUG, LOG_FILE, COUNTRY, YEAR
     DEFAULT_TEMPLATE = 'Qualitative_Data_UHCPW_Template.xlsx'
     DEBUG = args.debug
 
-    if not args.xlsx_template and filepath_exists(DEFAULT_TEMPLATE):
-        args.xlsx_template = DEFAULT_TEMPLATE
+    if DEBUG:
+        LOG_FILE = "log.json"
+        f = open(LOG_FILE, 'w')
+        f.close()
+
+    if not args.xlsx_template:
+        if filepath_exists(DEFAULT_TEMPLATE):
+            args.xlsx_template = DEFAULT_TEMPLATE
+        else:
+            parser.error(f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
     elif not filepath_exists(args.xlsx_template):
         parser.error(f'The template: {args.xlsx_template} doesn\'t exist')
-    else:
-        parser.error(
-            f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
+    
+    
+    debug('Source file:', args.docx_filename)
+    debug('Template file:', args.xlsx_template)
 
     document = Document(args.docx_filename)
 
     COUNTRY, YEAR = get_country_and_year(document)
     OUT_FILENAME = f'{COUNTRY}_{YEAR}_Qualitative_Data.xlsx'
-    debug(COUNTRY, YEAR)
+    
+    debug('Output file:', OUT_FILENAME)
+    debug('Country:',COUNTRY, 'Year:', YEAR)
 
     longtext_tables_data = extract_longtext_tables(document)
-    debug(json.dumps(longtext_tables_data))
+    debug('longtext_tables_data:\n', json.dumps(longtext_tables_data))
 
     try:
         wb = openpyxl.load_workbook(args.xlsx_template)
     except Exception as e:
-        print(e)
+        debug("openpyxl exception: ", e)
+        traceback.print_exc()
         sys.exit(1)
 
     ids = get_metadata_ids(wb)
