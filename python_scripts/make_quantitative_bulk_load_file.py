@@ -1,7 +1,9 @@
-import argparse
-import json
+import os
 import csv
 import sys
+import json
+import argparse
+import traceback
 import openpyxl
 from openpyxl.cell import MergedCell
 from collections import namedtuple
@@ -66,6 +68,7 @@ COUNTRY_DICT = {
     'UNK': 'United Kingdom of Great Britain and Northern Ireland',
 }
 
+
 COMBO_LIST = [
     'Total, Outpatient care',
     'Poorest, Dental care',
@@ -118,6 +121,7 @@ COMBO_LIST = [
     'Outpatient care, 4th'
 ]
 
+
 OLD_NAMES_DICT = {
     'Mean annual per capita OOP by structure (by quintile)': {
         'Medicines': 'Annual out-of-pocket payments for outpatient medicines per person by consumption quintile',
@@ -169,6 +173,16 @@ OLD_NAMES_DICT = {
     'Share of total OOP by structure (total population)': 'Breakdown of out-of-pocket payments by type of health care (total)',
     'Share of OOP by structure (by quintile)': 'Breakdown of out-of-pocket payments by type of health care (by consumption quintile)',
 }
+
+
+INDICATOR_IGNORING_SERVICE = [
+    'Annual out-of-pocket payments for outpatient medicines per person by consumption quintile',
+    'Annual out-of-pocket payments for inpatient care per person by consumption quintile',
+    'Annual out-of-pocket payments for dental care person by consumption quintile',
+    'Annual out-of-pocket payments for outpatient care per person by consumption quintile',
+    'Annual out-of-pocket payments for diagnostic tests per person by consumption quintile',
+    'Annual out-of-pocket payments for medical products per person by consumption quintile',
+]
 
 
 def get_new_name(indicator_name, service):
@@ -237,6 +251,7 @@ def extract_values_from_csv(filename):
                 if indicator_name not in values[country_name][year]:
                     values[country_name][year][indicator_name] = {}
 
+                service = 'NA' if indicator_name in INDICATOR_IGNORING_SERVICE else service
                 cat_opt_combo = make_combo_string(quintile, service)
                 if value != 'NA' and value != None:
                     values[country_name][year][indicator_name][cat_opt_combo] = value
@@ -366,7 +381,24 @@ def write_values(workbook, matched_values):
 
 def debug(*msg):
     if DEBUG:
-        print(*msg)
+        with open(LOG_FILE, "a") as log_file:
+            print(*msg, file=log_file)
+
+
+def filepath_exists(filepath):
+    return os.path.isfile(filepath)
+
+
+def get_template_path(parser, xlsx_template):
+    if not xlsx_template:
+        if filepath_exists(DEFAULT_TEMPLATE):
+            xlsx_template = DEFAULT_TEMPLATE
+        else:
+            parser.error(f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
+    elif not filepath_exists(xlsx_template):
+        parser.error(f'The template: {xlsx_template} doesn\'t exist')
+    
+    return xlsx_template
 
 
 def main():
@@ -384,18 +416,31 @@ def main():
                         help='Display debug logs, its recommended to redirect the output into a file, e.g: ... > log.txt')
     args = parser.parse_args()
 
-    global OUT_FILENAME, REAL_VALUE, DEBUG
+    if not filepath_exists(args.indicators_csv):
+        parser.error(f'The source file: {args.indicators_csv} doesn\'t exist')
+
+    global OUT_FILENAME, DEFAULT_TEMPLATE, REAL_VALUE, DEBUG, LOG_FILE
+    DEFAULT_TEMPLATE = 'Quantitative_Data_UHCPW_Template.xlsx'
     OUT_FILENAME = f'{args.indicators_csv.split(".csv")[0]}.xlsx'
     REAL_VALUE = args.real_value
     DEBUG = args.debug
 
-    if not args.xlsx_template:
-        args.xlsx_template = 'Quantitative_Data_UHCPW_Template.xlsx'
+    if DEBUG:
+        LOG_FILE = "log.json"
+        f = open(LOG_FILE, 'w')
+        f.close()
+
+    args.xlsx_template = get_template_path(parser, args.xlsx_template)
+    
+    debug('Source file:', args.indicators_csv)
+    debug('Template:', args.xlsx_template)
+    debug('Output file:', OUT_FILENAME)
 
     try:
         wb = openpyxl.load_workbook(args.xlsx_template)
     except Exception as e:
-        print(e)
+        debug("openpyxl exception: ", e)
+        traceback.print_exc()
         sys.exit(1)
 
     csv_values_dict = extract_values_from_csv(args.indicators_csv)

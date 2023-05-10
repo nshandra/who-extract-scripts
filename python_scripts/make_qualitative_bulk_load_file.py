@@ -207,6 +207,18 @@ def filepath_exists(filepath):
     return os.path.isfile(filepath)
 
 
+def get_template_path(parser, xlsx_template):
+    if not xlsx_template:
+        if filepath_exists(DEFAULT_TEMPLATE):
+            xlsx_template = DEFAULT_TEMPLATE
+        else:
+            parser.error(f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
+    elif not filepath_exists(xlsx_template):
+        parser.error(f'The template: {xlsx_template} doesn\'t exist')
+    
+    return xlsx_template
+
+
 def main():
     """
     Parses command-line arguments and extracts tables from a .docx file.
@@ -237,14 +249,7 @@ def main():
         f = open(LOG_FILE, 'w')
         f.close()
 
-    if not args.xlsx_template:
-        if filepath_exists(DEFAULT_TEMPLATE):
-            args.xlsx_template = DEFAULT_TEMPLATE
-        else:
-            parser.error(f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
-    elif not filepath_exists(args.xlsx_template):
-        parser.error(f'The template: {args.xlsx_template} doesn\'t exist')
-    
+    args.xlsx_template = get_template_path(parser, args.xlsx_template)
     
     debug('Source file:', args.docx_filename)
     debug('Template file:', args.xlsx_template)
