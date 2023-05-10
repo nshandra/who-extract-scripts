@@ -40,9 +40,9 @@ Specifying a template and using the 'real_value' column from the source file:
 python3 make_quantitative_bulk_load_file.py SPA_fp_indicators.csv -r --xlsx_template=~/docs/Quantitative_Template.xlsx
 ```
 
-Using debug flag and redirecting the debug text into a file:
+Using debug flag:
 ```bash
-python3 make_quantitative_bulk_load_file.py SPA_fp_indicators.csv -d > script_log.json
+python3 make_quantitative_bulk_load_file.py SPA_fp_indicators.csv -d
 ```
 
 ### Positional Arguments
@@ -57,7 +57,7 @@ python3 make_quantitative_bulk_load_file.py SPA_fp_indicators.csv -d > script_lo
 
 `-r`, `--real_value`: Use `real_value` instead of `value` from the CSV source file.
 
-`-d`, `--debug`: Display debug logs. It is recommended to redirect the output into a file, e.g: `... > log.json`.
+`-d`, `--debug`: Print debug logs into a `log.json` file.
 
 
 ## make_qualitative_bulk_load_file.py

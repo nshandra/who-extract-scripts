@@ -213,7 +213,7 @@ def make_combo_string(quintile: str, service: str):
 def check_for_empty_csv_fields(**vars):
     for name, value in vars.items():
         if name != 'row' and not value:
-            raise ValueError(f'Empty {name} variable in CSV file in row:\n{vars["row"]}')
+            print(f'Empty {name} variable in CSV file in row:\n{vars["row"]}')
 
 
 def extract_values_from_csv(filename):
