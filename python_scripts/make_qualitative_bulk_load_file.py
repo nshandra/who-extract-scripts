@@ -30,6 +30,7 @@ def get_data_element_id(de, data_elements_ids):
         print(f'Can\'t find id for: {de}')
         return None
 
+
 def get_metadata_ids(workbook):
     sections_id_dict = {}
     data_elements_id_dict = {}
@@ -43,7 +44,6 @@ def get_metadata_ids(workbook):
         name = str(row[2]).strip()
         Option_set = row[4] if row[4] else False
 
-        
         if type_col == 'sections':
             sections_id_dict[name] = identifier
 
@@ -141,7 +141,7 @@ def write_values(workbook, matched_values):
             last_cell = col[-1]
 
             write_data(col_indicator, col_combo,
-                            last_cell, matched_values)
+                       last_cell, matched_values)
 
     workbook.save(OUT_FILENAME)
 
@@ -170,6 +170,7 @@ def get_country_and_year(document):
 def extract_longtext_tables(document):
     """
     Extracts tables from the source DOCX file and returns them as a list of dictionaries.
+    Ignores fields starting with "Internal".
 
     :param document: The document loaded from the source DOCX file.
     :type document: Document
@@ -186,11 +187,14 @@ def extract_longtext_tables(document):
         table_data = {}
         for row in table.rows:
             key = row.cells[0].text.rstrip()
+            if key.startswith(INTERNAL):
+                continue
             value = row.cells[1].text.rstrip()
             if key and value:
                 table_data[key] = value
             else:
-                debug(f'Empty row with {"DE: " + key if key else ""}{" and " if key and value else ""}{"value: " + value if value else ""} in source file')
+                debug(
+                    f'Empty row with {"DE: " + key if key else ""}{" and " if key and value else ""}{"value: " + value if value else ""} in source file')
 
         tables_data_list.append(table_data)
 
@@ -215,7 +219,7 @@ def get_template_path(parser, xlsx_template):
             parser.error(f'The default template: {DEFAULT_TEMPLATE} doesn\'t exist')
     elif not filepath_exists(xlsx_template):
         parser.error(f'The template: {xlsx_template} doesn\'t exist')
-    
+
     return xlsx_template
 
 
@@ -240,7 +244,8 @@ def main():
     if not filepath_exists(args.docx_filename):
         parser.error(f'The source file: {args.docx_filename} doesn\'t exist')
 
-    global OUT_FILENAME, DEFAULT_TEMPLATE, DEBUG, LOG_FILE, COUNTRY, YEAR
+    global OUT_FILENAME, DEFAULT_TEMPLATE, DEBUG, LOG_FILE, COUNTRY, YEAR, INTERNAL
+    INTERNAL = 'Internal'
     DEFAULT_TEMPLATE = 'Qualitative_Data_UHCPW_Template.xlsx'
     DEBUG = args.debug
 
@@ -250,7 +255,7 @@ def main():
         f.close()
 
     args.xlsx_template = get_template_path(parser, args.xlsx_template)
-    
+
     debug('Source file:', args.docx_filename)
     debug('Template file:', args.xlsx_template)
 
@@ -258,9 +263,9 @@ def main():
 
     COUNTRY, YEAR = get_country_and_year(document)
     OUT_FILENAME = f'{COUNTRY}_{YEAR}_Qualitative_Data.xlsx'
-    
+
     debug('Output file:', OUT_FILENAME)
-    debug('Country:',COUNTRY, 'Year:', YEAR)
+    debug('Country:', COUNTRY, 'Year:', YEAR)
 
     longtext_tables_data = extract_longtext_tables(document)
     debug('longtext_tables_data:\n', json.dumps(longtext_tables_data))
